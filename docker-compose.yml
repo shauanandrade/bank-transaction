@@ -1,0 +1,35 @@
+version: '3'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: app-test
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./:/var/www/html
+    depends_on:
+      - db
+#      - redis
+
+  db:
+    image: mysql:8.0
+    container_name: app-mysql
+    restart: unless-stopped
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: app_teste
+      MYSQL_USER: teste
+      MYSQL_PASSWORD: teste123
+      MYSQL_ROOT_PASSWORD: Teste1234
+
+#  redis:
+#    image: redis:latest
+#    container_name: lumen-redis
+#    restart: unless-stopped
+#    ports:
+#      - "6379:6379"
