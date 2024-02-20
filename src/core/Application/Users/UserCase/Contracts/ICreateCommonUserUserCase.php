@@ -1,6 +1,6 @@
 <?php
 
-namespace Core\Application\Users\Contracts;
+namespace Core\Application\Users\UserCase\Contracts;
 
 
 interface ICreateCommonUserUserCase{

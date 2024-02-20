@@ -6,25 +6,14 @@ use Core\Domain\Entities\Users\Contracts\ICommonUsersEntity;
 
 class CommonUsersEntity implements ICommonUsersEntity
 {
-    private string $fullname;
-    private string $cpf;
-    private string $email;
-    private string $password;
-    private float $wallet;
-
     public function __construct(
-        string $fullname,
-        string $email,
-        string $password,
-        string $cpf,
-        float  $wallet = 0.0
+        private string $fullname,
+        private string $email,
+        private string $password,
+        private string $cpf,
+        private float  $wallet = 0.0
     )
     {
-        $this->fullname = $fullname;
-        $this->cpf = $cpf;
-        $this->email = $email;
-        $this->password = $password;
-        $this->wallet = $wallet ?? 0.0;
         $this->validate();
     }
 
@@ -150,14 +139,14 @@ class CommonUsersEntity implements ICommonUsersEntity
         return false;
     }
 
-    public static function toEntity(array $commonUser): self
+    public static function toEntity(array $user): self
     {
         return new self(
-            $commonUser['fullname'],
-            $commonUser['email'],
-            $commonUser['password'],
-            $commonUser['cpf_cnpj'],
-            $commonUser['wallet'] ?? 0.0,
+            $user['fullname'],
+            $user['email'],
+            $user['password'],
+            $user['cpf_cnpj'],
+            $user['wallet'] ?? 0.0,
         );
     }
 

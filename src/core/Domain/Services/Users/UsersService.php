@@ -4,6 +4,7 @@ namespace Core\Domain\Services\Users;
 
 use Core\Domain\Entities\Users\CommonUsersEntity;
 use Core\Domain\Entities\Users\Contracts\ICommonUsersEntity;
+use Core\Domain\Entities\Users\Contracts\IShopkeepersUsersEntity;
 use Core\Domain\Repositories\IUserRepository;
 use Core\Domain\Services\Users\Contracts\IUsersService;
 
@@ -20,23 +21,52 @@ class UsersService implements IUsersService
 
     public function createCommonUser(ICommonUsersEntity $commonUser): void
     {
-        $exitCpf = $this->findCpfOrCnpj($commonUser->getCpf());
-        dd($exitCpf);
-        if($exitCpf?->exists === true){
+        $existCpf = $this->findByCpfOrCnpj($commonUser->getCpf());
+        if($existCpf){
             throw new \Error('CPF exists in database');
+        }
+
+        $existEmail = $this->findByEmail($commonUser->getEmail());
+
+        if($existEmail){
+            throw new \Error('Email exists in database');
         }
 
         $this->userRepository->saveCommonUser($commonUser);
     }
 
-    public function findCpfOrCnpj(string $cpfOrCnpj): ?ICommonUsersEntity
+    public function findByCpfOrCnpj(string $cpfOrCnpj): ?array
     {
 
-        $user = $this->userRepository->findCpfOrCnpj($cpfOrCnpj);
+        $user = $this->userRepository->findByCpfOrCnpj($cpfOrCnpj);
+        if(!(isset($user[0]) && $user[0]))
+            return null;
 
-        $entity = new CommonUsersEntity();
-
-//        $entity->enti
         return $user[0];
+    }
+
+    public function findByEmail(string $email): ?array
+    {
+        $user = $this->userRepository->findByEmail($email);
+        if(!(isset($user[0]) && $user[0]))
+            return null;
+
+        return $user[0];
+    }
+
+    public function createShopKeepersUser(IShopkeepersUsersEntity $shopkeepersUsers): void
+    {
+        $existCpf = $this->findByCpfOrCnpj($shopkeepersUsers->getCnpj());
+        if($existCpf){
+            throw new \Error('CNPJ exists in database');
+        }
+
+        $existEmail = $this->findByEmail($shopkeepersUsers->getEmail());
+
+        if($existEmail){
+            throw new \Error('Email exists in database');
+        }
+
+        $this->userRepository->saveShopkeeperUser($shopkeepersUsers);
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Core\Application\Users\UserCase;
 
-use Core\Application\Users\Contracts\IFindAllUserCase;
+use Core\Application\Users\UserCase\Contracts\IFindAllUserCase;
 use Core\Domain\Services\Users\Contracts\IUsersService;
 
 class FindAllUserCase implements IFindAllUserCase

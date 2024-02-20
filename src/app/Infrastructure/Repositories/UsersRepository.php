@@ -5,6 +5,7 @@ namespace App\Infrastructure\Repositories;
 use App\Models\User;
 use Core\Domain\Entities\Users\CommonUsersEntity;
 use Core\Domain\Entities\Users\Contracts\ICommonUsersEntity;
+use Core\Domain\Entities\Users\Contracts\IShopkeepersUsersEntity;
 use Core\Domain\Repositories\IUserRepository;
 
 class UsersRepository implements IUserRepository
@@ -15,15 +16,25 @@ class UsersRepository implements IUserRepository
         return $users->toArray();
     }
 
-    public function saveCommonUser(ICommonUsersEntity $common_user): void
+    public function saveCommonUser(ICommonUsersEntity $commonUser): void
     {
-        $createCommonUser = $common_user->toArray();
+        $createCommonUser = $commonUser->toArray();
         User::create($createCommonUser);
     }
 
-    public function findCpfOrCnpj(string $cpf_cnpj): array
+    public function findByCpfOrCnpj(string $cpf_cnpj): array
     {
-        $user = User::where('cpf_cnpj',$cpf_cnpj)->get()->toArray();
-        return $user;
+        return User::where('cpf_cnpj',$cpf_cnpj)->get()->toArray();
+    }
+
+    public function findByEmail(string $email): ?array
+    {
+        return User::where('email',$email)->get()->toArray();
+    }
+
+    public function saveShopkeeperUser(IShopkeepersUsersEntity $shopkeepersUser): void
+    {
+        $createShopkeeperUser = $shopkeepersUser->toArray();
+        User::create($createShopkeeperUser);
     }
 }

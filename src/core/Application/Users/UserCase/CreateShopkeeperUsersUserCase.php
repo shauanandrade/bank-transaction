@@ -3,11 +3,13 @@
 namespace Core\Application\Users\UserCase;
 
 use Core\Application\Users\UserCase\Contracts\ICreateCommonUserUserCase;
+use Core\Application\Users\UserCase\Contracts\ICreateShopkeepersUserUserCase;
 use Core\Domain\Entities\Users\CommonUsersEntity;
+use Core\Domain\Entities\Users\ShopkeepersUsersEntity;
 use Core\Domain\Services\Users\Contracts\IUsersService;
 
 
-class CreateCommonUsersUserCase implements ICreateCommonUserUserCase
+class CreateShopkeeperUsersUserCase implements ICreateShopkeepersUserUserCase
 {
 
     public function __construct(private readonly IUsersService $usersService)
@@ -16,7 +18,7 @@ class CreateCommonUsersUserCase implements ICreateCommonUserUserCase
 
     public function execute(array $usersEntity): void
     {
-        $commom = CommonUsersEntity::toEntity($usersEntity);
-        $this->usersService->createCommonUser($commom);
+        $shopkeeper = ShopkeepersUsersEntity::toEntity($usersEntity);
+        $this->usersService->createShopKeepersUser($shopkeeper);
     }
 }
