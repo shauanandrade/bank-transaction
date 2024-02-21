@@ -10,11 +10,11 @@ class MakeTransactionUserCase implements IMakeTransactionUseCase
 
     public function __construct(public readonly ITransactionService $transactionService)
     {
-
     }
 
-    public function execute(string $payer, string $payee, float $value): void
+    public function execute(string $payer, string $payee, float $value): bool
     {
-        $this->transactionService->makeTransactionUser($payer,$payee,$value);
+        return $this->transactionService->makeTransactionUser($payer, $payee, $value);
+
     }
 }
