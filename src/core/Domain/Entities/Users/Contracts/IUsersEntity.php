@@ -4,6 +4,7 @@ namespace Core\Domain\Entities\Users\Contracts;
 
 interface IUsersEntity
 {
+    public function getId(): int;
     public function getFullname(): string;
     public function getEmail(): string;
     public function getPassword(): string;
@@ -11,6 +12,6 @@ interface IUsersEntity
     public function getCpfCnpj(): string;
     public function deposit(float $value): void;
     public function withdraw(float $value): bool;
-    public static function toEntity(array $user): self;
+    public static function toEntity(array $user): mixed;
     public function toArray(): array;
 }

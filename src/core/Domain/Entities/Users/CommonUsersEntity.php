@@ -68,10 +68,10 @@ class CommonUsersEntity extends UsersEntity implements ICommonUsersEntity
     public static function toEntity(array $user): self
     {
         return new self(
-            $user['fullname'],
-            $user['email'],
-            $user['password'],
-            $user['cpf_cnpj'],
+            $user['fullname']??'',
+            $user['email']??'',
+            $user['password']??'',
+            $user['cpf_cnpj']??'',
             $user['wallet'] ?? 0.0,
         );
     }
@@ -79,6 +79,7 @@ class CommonUsersEntity extends UsersEntity implements ICommonUsersEntity
     public function toArray(): array
     {
         return [
+            "id" => $this->getId(),
             "fullname" => $this->getFullname(),
             "email" => $this->getEmail(),
             "password" => $this->getPassword(),

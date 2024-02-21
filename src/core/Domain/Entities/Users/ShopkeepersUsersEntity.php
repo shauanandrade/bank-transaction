@@ -90,6 +90,7 @@ class ShopkeepersUsersEntity extends UsersEntity implements IShopkeepersUsersEnt
     public function toArray(): array
     {
         return [
+            "id" => $this->getId(),
             "fullname" => $this->getFullname(),
             "email" => $this->getEmail(),
             "password" => $this->getPassword(),

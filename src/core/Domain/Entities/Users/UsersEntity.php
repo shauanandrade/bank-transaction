@@ -6,6 +6,7 @@ use Core\Domain\Entities\Users\Contracts\IUsersEntity;
 
 class UsersEntity implements IUsersEntity
 {
+    protected int $id = 0;
     protected string $fullname;
     protected string $email;
 
@@ -14,6 +15,15 @@ class UsersEntity implements IUsersEntity
     protected string $password;
     protected float $wallet = 0.0;
 
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    public function setId(string $id): void
+    {
+        $this->id = $id;
+    }
     public function getFullname(): string
     {
         return $this->fullname;
@@ -70,15 +80,9 @@ class UsersEntity implements IUsersEntity
     }
 
 
-    public static function toEntity(array $user): IUsersEntity
+    public static function toEntity(array $user): mixed
     {
-        return new self(
-            $user['fullname'],
-            $user['email'],
-            $user['password'],
-            $user['cpf_cnpj'],
-            $user['wallet'] ?? 0.0,
-        );
+        return null;
     }
 
     public function toArray(): array
