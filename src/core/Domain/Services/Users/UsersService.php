@@ -21,7 +21,7 @@ class UsersService implements IUsersService
 
     public function createCommonUser(ICommonUsersEntity $commonUser): void
     {
-        $existCpf = $this->findByCpfOrCnpj($commonUser->getCpf());
+        $existCpf = $this->findByCpfOrCnpj($commonUser->getCpfCnpj());
         if($existCpf){
             throw new \Error('CPF exists in database');
         }
@@ -56,7 +56,7 @@ class UsersService implements IUsersService
 
     public function createShopKeepersUser(IShopkeepersUsersEntity $shopkeepersUsers): void
     {
-        $existCpf = $this->findByCpfOrCnpj($shopkeepersUsers->getCnpj());
+        $existCpf = $this->findByCpfOrCnpj($shopkeepersUsers->getCpfCnpj());
         if($existCpf){
             throw new \Error('CNPJ exists in database');
         }

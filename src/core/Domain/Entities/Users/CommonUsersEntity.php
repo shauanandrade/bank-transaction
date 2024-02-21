@@ -4,14 +4,14 @@ namespace Core\Domain\Entities\Users;
 
 use Core\Domain\Entities\Users\Contracts\ICommonUsersEntity;
 
-class CommonUsersEntity implements ICommonUsersEntity
+class CommonUsersEntity extends UsersEntity implements ICommonUsersEntity
 {
     public function __construct(
-        private string $fullname,
-        private string $email,
-        private string $password,
-        private string $cpf,
-        private float  $wallet = 0.0
+        protected string $fullname,
+        protected string $email,
+        protected string $password,
+        protected string $cpfCnpj,
+        protected float  $wallet = 0.0
     )
     {
         $this->validate();
@@ -31,7 +31,7 @@ class CommonUsersEntity implements ICommonUsersEntity
             throw new \Error("Field email invalid.");
         }
 
-        if (!$this->cpf) {
+        if (!$this->cpfCnpj) {
             throw new \Error("Field CPF is required");
         }
 
@@ -43,7 +43,7 @@ class CommonUsersEntity implements ICommonUsersEntity
 
     public function validateCPF(): bool
     {
-        $cpf = preg_replace('/[^0-9]/is', '', $this->cpf);
+        $cpf = preg_replace('/[^0-9]/is', '', $this->getCpfCnpj());
 
         if (strlen($cpf) != 11) {
             return false;
@@ -65,80 +65,6 @@ class CommonUsersEntity implements ICommonUsersEntity
         return true;
     }
 
-    public function getFullname(): string
-    {
-        return $this->fullname;
-    }
-
-    public function setFullname(string $fullname): void
-    {
-        $this->fullname = $fullname;
-    }
-
-    public function getCpf(): string
-    {
-        return $this->cpf;
-    }
-
-    public function setCpf(string $cpf): void
-    {
-        $this->cpf = $cpf;
-    }
-
-    public function getEmail(): string
-    {
-        return $this->email;
-    }
-
-    public function setEmail(string $email): void
-    {
-        $this->email = $email;
-    }
-
-    public function getPassword(): string
-    {
-        return $this->password;
-    }
-
-    public function setPassword(string $password): void
-    {
-        $this->password = $password;
-    }
-
-    public function getWallet(): float
-    {
-        return $this->wallet;
-    }
-
-    public function setWallet(float $wallet): void
-    {
-        $this->wallet = $wallet;
-    }
-
-    public function deposit(float $value): void
-    {
-        $this->wallet += $value;
-    }
-
-    public function withdraw(float $value): bool
-    {
-        if ($value <= $this->wallet) {
-            $this->wallet -= $value;
-            return true;
-        }
-
-        return false;
-    }
-
-    public function transfer(float $value, ICommonUsersEntity $recipient): bool
-    {
-        if ($this->withdraw($value)) {
-            $recipient->deposit($value);
-            return true;
-        }
-        return false;
-    }
-
     public static function toEntity(array $user): self
     {
         return new self(
@@ -156,8 +82,8 @@ class CommonUsersEntity implements ICommonUsersEntity
             "fullname" => $this->getFullname(),
             "email" => $this->getEmail(),
             "password" => $this->getPassword(),
-            "cpf_cnpj" => $this->getCpf(),
-            "wallet" => (float) $this->getWallet(),
+            "cpf_cnpj" => $this->getCpfCnpj(),
+            "wallet" => (float)$this->getWallet(),
         ];
     }
 }
