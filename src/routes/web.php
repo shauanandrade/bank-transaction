@@ -18,3 +18,4 @@ $router->get('users',['uses'=>'UsersController@findAll']);
 $router->get('users/{cpf_cnpj}',['uses'=>'UsersController@findByCpfOrCnpj']);
 $router->post('users/common',['uses'=>'UsersController@createCommonUser']);
 $router->post('users/shopkeeper',['uses'=>'UsersController@createShopkeeperUser']);
+$router->post('transaction',['uses'=>'TransactionsController@transaction']);
