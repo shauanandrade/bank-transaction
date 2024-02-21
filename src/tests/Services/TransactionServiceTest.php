@@ -22,6 +22,7 @@ class TransactionServiceTest extends TestCase
     private INotificationService $notificationService;
     private array $payerUser;
     private array $payeeUser;
+
     protected function setUp(): void
     {
         $this->transactionRepositoryMock = $this->createMock(ITransactionRepository::class);
@@ -29,20 +30,22 @@ class TransactionServiceTest extends TestCase
         $this->authorisationService = $this->createMock(IAuthorisationService::class);
         $this->notificationService = $this->createMock(INotificationService::class);
 
-        $this->payerUser = [
+        $this->payerUser = [[
+            'id' => 1,
             'fullname' => 'origin_user',
             'email' => 'email@gmail.com',
             'password' => '12343894',
             'cpf_cnpj' => '62810641005',
             'wallet' => 500.0,
-        ];
-        $this->payeeUser = [
+        ]];
+        $this->payeeUser = [[
+            'id' => 2,
             'fullname' => 'target_user',
             'email' => 'email@gmail.com',
             'password' => '12343894',
             'cpf_cnpj' => '00196978000170',
             'wallet' => 0.0,
-        ];
+        ]];
 
         $this->transactionService = new TransactionService(
             $this->transactionRepositoryMock,
@@ -85,12 +88,13 @@ class TransactionServiceTest extends TestCase
         $this->userRepositoryMock
             ->expects($this->exactly(2))
             ->method('updateWallet');
-        $this->transactionRepositoryMock->expects($this->once())->method('save');
-        $this->transactionService->makeTransactionUser($payer, $payee, $value);
+        $this->transactionRepositoryMock->expects($this->once())->method('save')->willReturn(true);
+        $response = $this->transactionService->makeTransactionUser($payer, $payee, $value);
+        $this->assertSame(true, $response);
 
     }
 
-    public function testMakeTransactionOriginUserNotFound()
+    public function testExceptionMakeTransactionPayerNotFound()
     {
         $payer = 1010; //ĩnvalid payer
         $payee = 2;
@@ -116,7 +120,7 @@ class TransactionServiceTest extends TestCase
 
     }
 
-    public function testMakeTransactionTargetUserNotFound()
+    public function testExceptionMakeTransactionPayeeNotFound()
     {
         $payer = 1;
         $payee = 2234; //invalid peyee
@@ -142,7 +146,7 @@ class TransactionServiceTest extends TestCase
 
     }
 
-    public function testMakeTransactionInsufficientBalance()
+    public function testExceptionMakeTransactionInsufficientBalance()
     {
         $payer = 1;
         $payee = 2;
@@ -166,7 +170,7 @@ class TransactionServiceTest extends TestCase
         $this->transactionService->makeTransactionUser($payer, $payee, $value);
     }
 
-    public function testMakeTransactionValueInvalid()
+    public function testExceptionMakeTransactionValueInvalid()
     {
         $payer = 1;
         $payee = 2;
@@ -190,7 +194,7 @@ class TransactionServiceTest extends TestCase
         $this->transactionService->makeTransactionUser($payer, $payee, $value);
     }
 
-    public function testMakeTransactionUserToUser()
+    public function testExceptionMakeTransactionUserToUser()
     {
         $payer = 1;
         $payee = 3;
@@ -222,9 +226,10 @@ class TransactionServiceTest extends TestCase
                 };
             });
 
-        $this->transactionService->makeTransactionUser($payer,$payee, $value);
+        $this->transactionService->makeTransactionUser($payer, $payee, $value);
     }
-    public function testMakeTransactionNoAuthorisation()
+
+    public function testExceptionMakeTransactionNoAuthorisation()
     {
         $payer = 1;
         $payee = 3;
@@ -256,9 +261,10 @@ class TransactionServiceTest extends TestCase
                 };
             });
         $this->expectExceptionMessage('Unauthorised transaction');
-        $this->transactionService->makeTransactionUser($payer,$payee, $value);
+        $this->transactionService->makeTransactionUser($payer, $payee, $value);
     }
-    public function testMakeTransactionNoNotification()
+
+    public function testMakeExceptionTransactionNoNotification()
     {
         $payer = 1;
         $payee = 3;
@@ -290,6 +296,41 @@ class TransactionServiceTest extends TestCase
                 };
             });
         $this->expectExceptionMessage('Unauthorised transaction');
-        $this->transactionService->makeTransactionUser($payer,$payee, $value);
+        $this->transactionService->makeTransactionUser($payer, $payee, $value);
+    }
+
+    public function testSuccessWhenShowingExtrato()
+    {
+        $mockResult = [
+            [
+                "id" => 1,
+                "user_payer_id" => 1,
+                "user_payee_id" => 2,
+                "value" => "150.000",
+                "status" => "approved",
+            ]
+        ];
+        $this->transactionRepositoryMock
+            ->expects($this->exactly(1))
+            ->method('findTransactionExtract')
+            ->willReturn($mockResult);
+
+        $result = $this->transactionService->extract(1);
+        $this->assertSame($mockResult[0]['id'],$result[0]['id']);
+        $this->assertSame($mockResult[0]['status'],$result[0]['status']);
+        $this->assertSame($mockResult[0]['user_payee_id'],$result[0]['user_payee_id']);
+    }
+
+    public function testReturnNullInExtract()
+    {
+        $mockResult = [
+        ];
+        $this->transactionRepositoryMock
+            ->expects($this->exactly(1))
+            ->method('findTransactionExtract')
+            ->willReturn($mockResult);
+
+        $result = $this->transactionService->extract(1);
+        $this->assertSame(null,$result);
     }
 }

@@ -19,7 +19,7 @@ class Transactions extends Model
      * @var string[]
      */
     protected $fillable = [
-        'payer', 'payee', 'value', 'status'
+        'user_payer_id', 'user_payee_id', 'value', 'status'
     ];
 
     /**

@@ -7,11 +7,27 @@ use Core\Domain\Contracts\INotificationService;
 
 class NotificationAdapter implements INotificationService
 {
+    private string $urlNotificationService;
+
+    public function __construct()
+    {
+        $this->urlNotificationService = getenv('NOTIFICATION_URL');
+    }
 
     public function sendNotification(): bool
     {
-        $request = $this->requestExternal('url_external');
-        return true;
+        try {
+            $response = $this->requestExternal($this->urlNotificationService);
+
+            $autorisationResponse = json_decode($response, true);
+
+            if (isset($autorisationResponse['message']) && $autorisationResponse['message'] === true) {
+                return true;
+            }
+            return false;
+        } catch (\Exception $exception) {
+            return false;
+        }
     }
 
     private function requestExternal(string $url): ?string

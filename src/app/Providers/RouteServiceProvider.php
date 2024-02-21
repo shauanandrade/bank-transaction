@@ -6,7 +6,9 @@ use App\Infrastructure\Adapters\AuthorisationAdapter;
 use App\Infrastructure\Adapters\NotificationAdapter;
 use App\Infrastructure\Repositories\TransactionRepository;
 use App\Infrastructure\Repositories\UsersRepository;
+use Core\Application\Transactions\UserCase\Contracts\IExtractPayerTransactionUserCase;
 use Core\Application\Transactions\UserCase\Contracts\IMakeTransactionUseCase;
+use Core\Application\Transactions\UserCase\ExtractPayerTransactionUserCase;
 use Core\Application\Transactions\UserCase\MakeTransactionUserCase;
 use Core\Application\Users\UserCase\Contracts\ICreateCommonUserUserCase;
 use Core\Application\Users\UserCase\Contracts\ICreateShopkeepersUserUserCase;
@@ -52,10 +54,18 @@ class RouteServiceProvider extends ServiceProvider
         $this->app->singleton(IMakeTransactionUseCase::class, function ($app) {
             $transactionRepo = new TransactionRepository();
             $userRepository = new UsersRepository();
-            $autorization = new AuthorisationAdapter();
-            $notificaiton = new NotificationAdapter();
-            $transactionService = new TransactionService($transactionRepo, $userRepository, $autorization, $notificaiton);
+            $authorisation = new AuthorisationAdapter();
+            $notification = new NotificationAdapter();
+            $transactionService = new TransactionService($transactionRepo, $userRepository, $authorisation, $notification);
             return new MakeTransactionUserCase($transactionService);
+        });
+        $this->app->singleton(IExtractPayerTransactionUserCase::class, function ($app) {
+            $transactionRepo = new TransactionRepository();
+            $userRepository = new UsersRepository();
+            $authorisation = new AuthorisationAdapter();
+            $notification = new NotificationAdapter();
+            $transactionService = new TransactionService($transactionRepo, $userRepository, $authorisation, $notification);
+            return new ExtractPayerTransactionUserCase($transactionService);
         });
     }
 }

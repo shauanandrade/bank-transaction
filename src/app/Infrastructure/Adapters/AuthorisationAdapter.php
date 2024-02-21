@@ -6,11 +6,27 @@ use Core\Domain\Contracts\IAuthorisationService;
 
 class AuthorisationAdapter implements IAuthorisationService
 {
+    private string $urlServiceAuthorisation;
+
+    public function __construct()
+    {
+        $this->urlServiceAuthorisation = getenv('AUTHORISATION_URL');
+    }
 
     public function authorisation(): bool
     {
-        $response = $this->requestExternal('url');
-        return false;
+        try {
+            $response = $this->requestExternal($this->urlServiceAuthorisation);
+
+            $autorisationResponse = json_decode($response, true);
+
+            if (isset($autorisationResponse['message']) && $autorisationResponse['message'] === "Autorizado") {
+                return true;
+            }
+            return false;
+        } catch (\Exception $exception) {
+            return false;
+        }
     }
 
     private function requestExternal(string $url): ?string
