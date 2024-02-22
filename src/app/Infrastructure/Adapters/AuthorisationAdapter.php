@@ -2,9 +2,9 @@
 
 namespace App\Infrastructure\Adapters;
 
-use Core\Domain\Contracts\IAuthorisationService;
+use Core\Domain\Contracts\IAuthorisationExternal;
 
-class AuthorisationAdapter implements IAuthorisationService
+class AuthorisationAdapter implements IAuthorisationExternal
 {
     private string $urlServiceAuthorisation;
 

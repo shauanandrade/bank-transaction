@@ -2,8 +2,8 @@
 
 namespace Core\Domain\Services\Transactions;
 
-use Core\Domain\Contracts\IAuthorisationService;
-use Core\Domain\Contracts\INotificationService;
+use Core\Domain\Contracts\IAuthorisationExternal;
+use Core\Domain\Contracts\INotificationExternal;
 use Core\Domain\Entities\Transaction\Contracts\ITransactionsEntity;
 use Core\Domain\Entities\Transaction\TransactionsEntity;
 use Core\Domain\Entities\Users\CommonUsersEntity;
@@ -15,14 +15,17 @@ use Core\Domain\Entities\Users\UsersEntity;
 use Core\Domain\Repositories\ITransactionRepository;
 use Core\Domain\Repositories\IUserRepository;
 use Core\Domain\Services\Transactions\Contracts\ITransactionService;
+use Core\Domain\ValueObjects\CpfCnpj;
+use Core\Domain\ValueObjects\Email;
+use Core\Domain\ValueObjects\Password;
 
 class TransactionService implements ITransactionService
 {
     public function __construct(
         private readonly ITransactionRepository $transactionRepository,
         private readonly IUserRepository        $userRepository,
-        private readonly IAuthorisationService  $authorizerService,
-        private readonly INotificationService   $notificationService,
+        private readonly IAuthorisationExternal $authorisationExternal,
+        private readonly INotificationExternal  $notificationExternal,
     )
     {
     }
@@ -33,16 +36,16 @@ class TransactionService implements ITransactionService
         if (!$findPayer) {
             throw new \Error('Payer not found.');
         }
-
-        if(strlen($findPayer[0]['cpf_cnpj']) !== 11){
+        $fieldCpf = new CpfCnpj($findPayer[0]['cpf_cnpj']);
+        if (!$fieldCpf->isCpf()) {
             throw new \Error('Payer is not a Common user.');
         }
 
         $payerUser = new CommonUsersEntity(
             $findPayer[0]['fullname'] ?? '',
-            $findPayer[0]['email'] ?? '',
-            $findPayer[0]['password'] ?? '',
-            $findPayer[0]['cpf_cnpj'] ?? '',
+            new Email($findPayer[0]['email'] ?? ''),
+            new Password($findPayer[0]['password'] ?? ''),
+            $fieldCpf ?? '',
             $findPayer[0]['wallet'] ?? '',
         );
         $payerUser->setId($findPayer[0]['id']);
@@ -79,8 +82,8 @@ class TransactionService implements ITransactionService
             throw new \Error('Your balance is insufficient');
         }
 
-        $isApproved = $this->authorizerService->authorisation();
-        $isNotification = $this->notificationService->sendNotification();
+        $isApproved = $this->authorisationExternal->authorisation();
+        $isNotification = $this->notificationExternal->sendNotification($transaction);
         if (!$isApproved || !$isNotification) {
             $transaction->revertTransaction();
             throw new \Error('Unauthorised transaction');

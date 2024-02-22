@@ -23,7 +23,7 @@ class UsersService implements IUsersService
     {
         $existCpf = $this->findByCpfOrCnpj($commonUser->getCpfCnpj());
         if($existCpf){
-            throw new \Error('CPF exists in database');
+            throw new \Error('CpfCnpj exists in database');
         }
 
         $existEmail = $this->findByEmail($commonUser->getEmail());

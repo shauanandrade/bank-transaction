@@ -2,7 +2,7 @@
 
 namespace Core\Domain\Contracts;
 
-interface IAuthorisationService
+interface IAuthorisationExternal
 {
     public function authorisation(): bool;
 }

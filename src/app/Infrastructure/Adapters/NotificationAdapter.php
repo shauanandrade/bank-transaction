@@ -2,10 +2,11 @@
 
 namespace App\Infrastructure\Adapters;
 
-use Core\Domain\Contracts\IAuthorisationService;
-use Core\Domain\Contracts\INotificationService;
+use Core\Domain\Contracts\IAuthorisationExternal;
+use Core\Domain\Contracts\INotificationExternal;
+use Core\Domain\Entities\Transaction\Contracts\ITransactionsEntity;
 
-class NotificationAdapter implements INotificationService
+class NotificationAdapter implements INotificationExternal
 {
     private string $urlNotificationService;
 
@@ -14,13 +15,16 @@ class NotificationAdapter implements INotificationService
         $this->urlNotificationService = getenv('NOTIFICATION_URL');
     }
 
-    public function sendNotification(): bool
+    public function sendNotification(ITransactionsEntity $transactionsEntity): bool
     {
         try {
             $response = $this->requestExternal($this->urlNotificationService);
 
             $autorisationResponse = json_decode($response, true);
 
+//            $payerEmail = $transactionsEntity->getPayer()->getEmail()->getValue();
+//            $payeeEmail = $transactionsEntity->getPayee()->getEmail()->getValue();
+            
             if (isset($autorisationResponse['message']) && $autorisationResponse['message'] === true) {
                 return true;
             }
