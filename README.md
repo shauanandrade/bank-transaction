@@ -1,6 +1,7 @@
 # Back Transaction
 
-Este projeto implementa um aplicativo de transação bancária com uma arquitetura em camadas, seguindo os princípios SOLID para clareza, manutenabilidade e escalabilidade.
+Este projeto é uma implementação de um aplicativo de transações bancárias com uma arquitetura em camadas, projetada seguindo os princípios SOLID. Essa abordagem visa garantir clareza, manutenibilidade e escalabilidade do sistema, tornando-o mais organizado e fácil de entender e modificar no futuro
+
 
 ## Estrutura do Projeto
 
@@ -28,11 +29,9 @@ O projeto está estruturado da seguinte forma:
 ## Tecnologias Utilizadas
 
 - **PHP 8.2+**: Linguagem de programação principal.
-- **Lumen**: Framework PHP para criação de APIs e microserviços.
+- **Lumen**: Framework PHP para criação de APIs.
 - **Docker / Docker Compose**: Utilizados para encapsular a aplicação e suas dependências em contêineres isolados.
 - **MySQL**: Banco de dados utilizado para armazenar os dados da aplicação.
-  Claro, aqui está uma versão mais simples:
-- **SwaggerLume**: Gera automaticamente a documentação da sua API. Saiba mais em: [SwaggerLume](https://github.com/DarkaOnLine/SwaggerLume)
 
 ## Componentes chave:
 
@@ -40,9 +39,13 @@ O projeto está estruturado da seguinte forma:
 - Princípios SOLID para código sustentável, testável e escalável.
 - Arquitetura em camadas para flexibilidade e testabilidade.
 - Injeção de dependência para componentes fracamente acoplados.
-- Docker para ambientes de desenvolvimento e deploy consistentes.
+- Docker para ambientes de desenvolvimento.
 
-## Como Rodar
+## Plugin Utilizado
+
+- **SwaggerLume**: Gera documentação da API. Saiba mais em: [SwaggerLume](https://github.com/DarkaOnLine/SwaggerLume)
+
+## Como Rodar Utilizando o Docker
 
 Para executar a aplicação localmente, siga os passos abaixo:
 
@@ -51,3 +54,9 @@ Para executar a aplicação localmente, siga os passos abaixo:
 3. Execute `docker-compose up` para iniciar os contêineres Docker.
 4. Execute as migrações do banco de dados utilizando o comando `docker-compose exec app php artisan migrate`.
 5. Acesse a aplicação em `http://localhost:8000`.
+6. Acesse a documentação da API em `http://localhost:8000/api/documentation`.
+
+## Como rodar com php
+1. Clone este repositório.
+2. Copie o arquivo `.env.example` para `.env` e configure as variáveis de ambiente necessárias, especialmente as relacionadas ao banco de dados.
+3. 
