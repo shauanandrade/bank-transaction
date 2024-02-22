@@ -3,18 +3,18 @@
 namespace Core\Domain\Entities\Users;
 
 use Core\Domain\Entities\Users\Contracts\IUsersEntity;
+use Core\Domain\ValueObjects\CpfCnpj;
+use Core\Domain\ValueObjects\Email;
+use Core\Domain\ValueObjects\Password;
 
 class UsersEntity implements IUsersEntity
 {
     protected int $id = 0;
     protected string $fullname;
-    protected string $email;
-
-    protected string $cpfCnpj;
-
-    protected string $password;
+    protected Email $email;
+    protected CpfCnpj $cpfCnpj;
+    protected Password $password;
     protected float $wallet = 0.0;
-
     public function getId(): int
     {
         return $this->id;
@@ -34,24 +34,24 @@ class UsersEntity implements IUsersEntity
         $this->fullname = $fullname;
     }
 
-    public function getEmail(): string
+    public function getEmail(): Email
     {
         return $this->email;
     }
 
     public function setEmail(string $email): void
     {
-        $this->email = $email;
+        $this->email = new Email($email);
     }
 
-    public function getPassword(): string
+    public function getPassword(): Password
     {
         return $this->password;
     }
 
     public function setPassword(string $password): void
     {
-        $this->password = $password;
+        $this->password = new Password($password);
     }
 
     public function getWallet(): float
@@ -90,13 +90,13 @@ class UsersEntity implements IUsersEntity
         return [];
     }
 
-    public function getCpfCnpj(): string
+    public function getCpfCnpj(): CpfCnpj
     {
         return $this->cpfCnpj;
     }
 
     public function setCpfCnpj(string $cpfCnpj): void
     {
-        $this->cpfCnpj = $cpfCnpj;
+        $this->cpfCnpj = new CpfCnpj($cpfCnpj);
     }
 }

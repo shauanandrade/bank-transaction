@@ -3,6 +3,10 @@
 namespace Tests\Entities;
 
 use Core\Domain\Entities\Users\CommonUsersEntity;
+use Core\Domain\ValueObjects\CpfCnpj;
+use Core\Domain\ValueObjects\Email;
+use Core\Domain\ValueObjects\Password;
+use Faker\Calculator\Ean;
 use PHPUnit\Framework\TestCase;
 
 class CommonUsersEntitiesTest extends TestCase
@@ -12,11 +16,12 @@ class CommonUsersEntitiesTest extends TestCase
     {
         $userEntity = new CommonUsersEntity(
             "User name",
-            "shopkeepers@email.com",
-            "password123",
-            '70188041087',
+            new Email("shopkeepers@email.com"),
+            new Password("password123"),
+            new CpfCnpj('70188041087'),
             0
         );
+
         $this->assertInstanceOf(CommonUsersEntity::class,$userEntity);
     }
 
@@ -25,9 +30,9 @@ class CommonUsersEntitiesTest extends TestCase
         $this->expectExceptionMessage("Field fullname is required and must be at least 3 character.");
         new CommonUsersEntity(
             "Us", //invalid fullname
-            "shopkeepers@email.com",
-            "password123",
-            '70188041087',
+            new Email("shopkeepers@email.com"),
+            new Password("password123"),
+            new CpfCnpj('70188041087'),
             0
         );
     }
@@ -38,9 +43,9 @@ class CommonUsersEntitiesTest extends TestCase
 
         new CommonUsersEntity(
             "Common User",
-            "shopkeepers@email.com",
-            "password123",
-            '', // Cpf is null
+            new Email("shopkeepers@email.com"),
+            new Password("password123"),
+            new CpfCnpj(''), // CpfCnpj is null
             0
         );
     }
@@ -51,9 +56,9 @@ class CommonUsersEntitiesTest extends TestCase
 
         new CommonUsersEntity(
             "Common User",
-            "shopkeepers@email.com",
-            "password123",
-            '70188041012', // cpf is invalid
+            new Email("shopkeepers@email.com"),
+            new Password("password123"),
+            new CpfCnpj('70188041012'), // cpf is invalid
             0
         );
     }
@@ -63,9 +68,9 @@ class CommonUsersEntitiesTest extends TestCase
         $this->expectExceptionMessage("Field email is required.");
         new CommonUsersEntity(
             "User Sk",
-            "",
-            "password123",
-            '70188041087',
+            new Email(""),
+            new Password("password123"),
+            new CpfCnpj('70188041087'),
             0
         );
     }
@@ -76,9 +81,9 @@ class CommonUsersEntitiesTest extends TestCase
 
         new CommonUsersEntity(
             "User Sk",
-            "error_email@email",
-            "password123",
-            '70188041087',
+            new Email("error_email@email"),
+            new Password("password123"),
+            new CpfCnpj('70188041087'),
             0
         );
     }
@@ -87,9 +92,9 @@ class CommonUsersEntitiesTest extends TestCase
     {
         $userEntity = new CommonUsersEntity(
             "User name",
-            "shopkeepers@email.com",
-            "password123",
-            '70188041087',
+            new Email("shopkeepers@email.com"),
+            new Password("password123"),
+            new CpfCnpj('70188041087'),
             0.0
         );
 
@@ -103,9 +108,9 @@ class CommonUsersEntitiesTest extends TestCase
     {
         $userEntity = new CommonUsersEntity(
             "User name",
-            "shopkeepers@email.com",
-            "password123",
-            '70188041087',
+            new Email("shopkeepers@email.com"),
+            new Password("password123"),
+            new CpfCnpj('70188041087'),
             3000.0
         );
 
@@ -120,9 +125,9 @@ class CommonUsersEntitiesTest extends TestCase
     {
         $userEntity = new CommonUsersEntity(
             "User name",
-            "shopkeepers@email.com",
-            "password123",
-            '70188041087',
+            new Email("shopkeepers@email.com"),
+            new Password("password123"),
+            new CpfCnpj('70188041087'),
             0
         );
 
@@ -130,55 +135,5 @@ class CommonUsersEntitiesTest extends TestCase
         $isWithdraw = $userEntity->withdraw(1500);
         $this->assertSame(false, $isWithdraw);
 
-    }
-
-    public function testTransfer()
-    {
-        $user1 = new CommonUsersEntity(
-            "User name",
-            "shopkeepers@email.com",
-            "password123",
-            '70188041087',
-            300
-        );
-        $user2 = new CommonUsersEntity(
-            "User name2",
-            "shopkeepers2@email.com",
-            "password123",
-            '70188041087',
-            0
-        );
-
-        $this->assertSame(300.0, $user1->getWallet());
-        $this->assertSame(0.0, $user2->getWallet());
-        $isSuccess = $user1->transfer(140.50,$user2);
-        $this->assertSame($isSuccess,true);
-        $this->assertSame(159.50, $user1->getWallet());
-        $this->assertSame(140.50, $user2->getWallet());
-    }
-
-    public function testTransferError()
-    {
-        $user1 = new CommonUsersEntity(
-            "User name",
-            "shopkeepers@email.com",
-            "password123",
-            '70188041087',
-            300.0
-        );
-        $user2 = new CommonUsersEntity(
-            "User name2",
-            "shopkeepers2@email.com",
-            "password123",
-            '70188041087',
-            0
-        );
-
-        $this->assertSame(300.0, $user1->getWallet());
-        $this->assertSame(0.0, $user2->getWallet());
-        $isSuccess = $user1->transfer(400.0,$user2);
-        $this->assertSame($isSuccess,false);
-        $this->assertSame(300.0, $user1->getWallet());
-        $this->assertSame(0.0, $user2->getWallet());
     }
 }

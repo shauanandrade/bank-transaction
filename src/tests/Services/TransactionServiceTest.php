@@ -2,8 +2,8 @@
 
 namespace Tests\Services;
 
-use Core\Domain\Contracts\IAuthorisationService;
-use Core\Domain\Contracts\INotificationService;
+use Core\Domain\Contracts\IAuthorisationExternal;
+use Core\Domain\Contracts\INotificationExternal;
 use Core\Domain\Entities\Users\CommonUsersEntity;
 use Core\Domain\Entities\Users\ShopkeepersUsersEntity;
 use Core\Domain\Repositories\ITransactionRepository;
@@ -18,8 +18,8 @@ class TransactionServiceTest extends TestCase
     private ITransactionService $transactionService;
     private ITransactionRepository $transactionRepositoryMock;
     private IUserRepository $userRepositoryMock;
-    private IAuthorisationService $authorisationService;
-    private INotificationService $notificationService;
+    private IAuthorisationExternal $authorisationService;
+    private INotificationExternal $notificationService;
     private array $payerUser;
     private array $payeeUser;
 
@@ -27,8 +27,8 @@ class TransactionServiceTest extends TestCase
     {
         $this->transactionRepositoryMock = $this->createMock(ITransactionRepository::class);
         $this->userRepositoryMock = $this->createMock(IUserRepository::class);
-        $this->authorisationService = $this->createMock(IAuthorisationService::class);
-        $this->notificationService = $this->createMock(INotificationService::class);
+        $this->authorisationService = $this->createMock(IAuthorisationExternal::class);
+        $this->notificationService = $this->createMock(INotificationExternal::class);
 
         $this->payerUser = [[
             'id' => 1,
