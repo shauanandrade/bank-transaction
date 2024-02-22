@@ -56,7 +56,14 @@ Para executar a aplicação localmente, siga os passos abaixo:
 5. Acesse a aplicação em `http://localhost:8000`.
 6. Acesse a documentação da API em `http://localhost:8000/api/documentation`.
 
-## Como rodar com php
+## Como executar com PHP
+
+Para executar a aplicação localmente, siga os passos abaixo:
+
 1. Clone este repositório.
-2. Copie o arquivo `.env.example` para `.env` e configure as variáveis de ambiente necessárias, especialmente as relacionadas ao banco de dados.
-3. 
+2. Copie o arquivo `.env.example` para `.env` e configure as variáveis de ambiente necessárias, especialmente aquelas relacionadas ao banco de dados.
+3. Acesse a pasta `src` e execute o comando `composer install`.
+4. Ainda na pasta `src`, abra o terminal e execute `php artisan migrate`.
+5. Execute a aplicação digitando `php -S 127.0.0.1 -t public` no terminal.
+6. Acesse a aplicação em `http://localhost:8000`.
+7. Consulte a documentação da API em `http://localhost:8000/api/documentation`.

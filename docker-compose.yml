@@ -22,10 +22,10 @@ services:
     ports:
       - "3306:3306"
     environment:
-      MYSQL_DATABASE: app_teste
-      MYSQL_USER: teste
-      MYSQL_PASSWORD: teste123
-      MYSQL_ROOT_PASSWORD: Teste1234
+      MYSQL_DATABASE: bank_transaction
+      MYSQL_USER: transactions
+      MYSQL_PASSWORD: transactions@2024
+      MYSQL_ROOT_PASSWORD: transactions@2024up
 
 #  redis:
 #    image: redis:latest

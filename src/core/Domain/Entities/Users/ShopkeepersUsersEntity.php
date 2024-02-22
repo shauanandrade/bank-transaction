@@ -44,9 +44,9 @@ class ShopkeepersUsersEntity extends UsersEntity implements IShopkeepersUsersEnt
     {
         return new self(
             $user['fullname'],
-            $user['email'],
-            $user['password'],
-            $user['cpf_cnpj'],
+            new Email($user['email']),
+            new Password($user['password']),
+            new CpfCnpj($user['cpf_cnpj']),
             $user['wallet'] ?? 0.0,
         );
     }

@@ -21,9 +21,9 @@ class ShopkeepersUsersEntitiesTest extends TestCase
             new CpfCnpj('86798316000196'),
             0
         );
-        $this->assertInstanceOf(ShopkeepersUsersEntity::class,$userEntity);
+        $this->assertInstanceOf(ShopkeepersUsersEntity::class, $userEntity);
         $hash = $userEntity->getPassword()->getValue();
-        $this->assertSame(true,$userEntity->getPassword()->verification('password123',$hash));
+        $this->assertSame(true, $userEntity->getPassword()->verification('password123', $hash));
     }
 
     public function testExceptionFullName()
@@ -73,9 +73,9 @@ class ShopkeepersUsersEntitiesTest extends TestCase
             0
         );
 
-        $this->assertSame(0.0,$userEntity->getWallet());
+        $this->assertSame(0.0, $userEntity->getWallet());
         $userEntity->deposit(3000.0);
-        $this->assertSame(3000.0,$userEntity->getWallet());
+        $this->assertSame(3000.0, $userEntity->getWallet());
 
     }
 
@@ -111,6 +111,7 @@ class ShopkeepersUsersEntitiesTest extends TestCase
         $this->assertSame(false, $isWithdraw);
 
     }
+
     public function testExceptionCnpjRequired()
     {
         $this->expectExceptionMessage("Field CNPJ is required");
@@ -135,5 +136,19 @@ class ShopkeepersUsersEntitiesTest extends TestCase
             new CpfCnpj('86798316000192'),
             0
         );
+    }
+
+    public function testToEntity()
+    {
+        $shopkeepersArr = [
+            "fullname" => "User name",
+            "email" => "shopkeepers@email.com",
+            'password' => "",
+            "cpf_cnpj" => '86798316000196',
+            "wallet" => 304.0
+        ];
+        $shopkeepersObj = ShopkeepersUsersEntity::toEntity($shopkeepersArr);
+        $this->assertInstanceOf(ShopkeepersUsersEntity::class,$shopkeepersObj);
+        $this->assertSame($shopkeepersObj->getEmail()->getValue(), $shopkeepersArr['email']);
     }
 }
