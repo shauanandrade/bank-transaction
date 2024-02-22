@@ -14,9 +14,9 @@
 */
 
 
-$router->get('users',['uses'=>'UsersController@findAll']);
-$router->get('users/{cpf_cnpj}',['uses'=>'UsersController@findByCpfOrCnpj']);
-$router->post('users/common',['uses'=>'UsersController@createCommonUser']);
-$router->post('users/shopkeeper',['uses'=>'UsersController@createShopkeeperUser']);
+$router->get('user',['uses'=>'UsersController@findAll']);
+$router->get('user/{cpf_cnpj}',['uses'=>'UsersController@findByCpfOrCnpj']);
+$router->post('user',['uses'=>'UsersController@createCommonUser']);
+$router->post('user/shopkeeper',['uses'=>'UsersController@createShopkeeperUser']);
 $router->post('transaction',['uses'=>'TransactionsController@transaction']);
 $router->get('transaction/extract/{id}',['uses'=>'TransactionsController@extract']);

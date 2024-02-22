@@ -23,7 +23,7 @@ $app = new Laravel\Lumen\Application(
     dirname(__DIR__)
 );
 
-// $app->withFacades();
+ $app->withFacades();
 
  $app->withEloquent();
 
@@ -37,6 +37,7 @@ $app = new Laravel\Lumen\Application(
 | your own bindings here if you like or you can make another file.
 |
 */
+$app->configure('swagger-lume');
 
 $app->singleton(
     Illuminate\Contracts\Debug\ExceptionHandler::class,
@@ -95,6 +96,7 @@ $app->configure('app');
 | totally optional, so you are not required to uncomment this line.
 |
 */
+$app->register(\SwaggerLume\ServiceProvider::class);
  $app->register(\Illuminate\Database\DatabaseServiceProvider::class);
  $app->register(App\Providers\RouteServiceProvider::class);
 // $app->register(App\Providers\AppServiceProvider::class);
