@@ -1,0 +1,323 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Bank Transaction API",
+        "version": "0.1"
+    },
+    "paths": {
+        "/transaction/extract/{id}": {
+            "get": {
+                "tags": [
+                    "Transaction"
+                ],
+                "summary": "Retorna o extrato de transferencia do usuário",
+                "operationId": "0576b8bad177d6d343aedebf9bd30b0c",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do usuário",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista o extrato de transferencia do usuário"
+                    }
+                }
+            }
+        },
+        "/transaction": {
+            "post": {
+                "tags": [
+                    "Transaction"
+                ],
+                "summary": "Faz a transferência",
+                "operationId": "b84208024b18b89e083ace3383af2d1b",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "payer",
+                                    "payee",
+                                    "value"
+                                ],
+                                "properties": {
+                                    "payer": {
+                                        "description": "ID do pagador",
+                                        "type": "number",
+                                        "example": 1
+                                    },
+                                    "payee": {
+                                        "description": "ID do beneficiario",
+                                        "type": "number",
+                                        "example": 2
+                                    },
+                                    "value": {
+                                        "description": "Valor a transferir",
+                                        "type": "float",
+                                        "example": 1352.34
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Transferência finalizada com sucesso."
+                    },
+                    "422": {
+                        "description": "Erro de validação"
+                    },
+                    "500": {
+                        "description": "Erros internos."
+                    }
+                }
+            }
+        },
+        "/user": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Retorna todos os usuários.",
+                "operationId": "8028f434ac499dba6fbb3b034da6a7d0",
+                "responses": {
+                    "200": {
+                        "description": "Lista todos os usuários registrado.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "required": [
+                                        "fullname",
+                                        "cpf_cnpj",
+                                        "email",
+                                        "password"
+                                    ],
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "fullname": {
+                                                "type": "string",
+                                                "example": "Shopkeepers User"
+                                            },
+                                            "cpf_cnpj": {
+                                                "type": "string",
+                                                "example": "12345678901234"
+                                            },
+                                            "email": {
+                                                "type": "string",
+                                                "format": "email",
+                                                "example": "user@example.com"
+                                            },
+                                            "password": {
+                                                "type": "string",
+                                                "example": "secret"
+                                            },
+                                            "wallet": {
+                                                "type": "number",
+                                                "format": "float",
+                                                "default": 0,
+                                                "example": 100
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Usuário não encontrado"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Cria um novo usuário comum",
+                "operationId": "62b70440f894d03112ff1d807f414554",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "fullname",
+                                    "cpf_cnpj",
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "fullname": {
+                                        "type": "string",
+                                        "example": "Common User"
+                                    },
+                                    "cpf_cnpj": {
+                                        "type": "string",
+                                        "example": "12345678901"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "user@example.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "secret"
+                                    },
+                                    "wallet": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 100
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Usuário criado com sucesso"
+                    },
+                    "422": {
+                        "description": "Erro de validação"
+                    }
+                }
+            }
+        },
+        "/user/{cpf_cnpj}": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Retorna um usuário pelo CPF/CNPJ",
+                "operationId": "40008dbc0eb78ec88a925f255f553731",
+                "parameters": [
+                    {
+                        "name": "cpf_cnpj",
+                        "in": "path",
+                        "description": "CPF ou CNPJ do usuário",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Usuário encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "required": [
+                                        "fullname",
+                                        "cpf_cnpj",
+                                        "email",
+                                        "password"
+                                    ],
+                                    "properties": {
+                                        "fullname": {
+                                            "type": "string",
+                                            "example": "Shopkeepers User"
+                                        },
+                                        "cpf_cnpj": {
+                                            "type": "string",
+                                            "example": "12345678901234"
+                                        },
+                                        "email": {
+                                            "type": "string",
+                                            "format": "email",
+                                            "example": "user@example.com"
+                                        },
+                                        "password": {
+                                            "type": "string",
+                                            "example": "secret"
+                                        },
+                                        "wallet": {
+                                            "type": "number",
+                                            "format": "float",
+                                            "default": 0,
+                                            "example": 100
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Usuário não encontrado"
+                    }
+                }
+            }
+        },
+        "/user/shopkeeper": {
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Cria um novo usuário lojista",
+                "operationId": "f8c79e1985a17e0823765f5eeb69d5c1",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "fullname",
+                                    "cpf_cnpj",
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "fullname": {
+                                        "type": "string",
+                                        "example": "Shopkeepers User"
+                                    },
+                                    "cpf_cnpj": {
+                                        "type": "string",
+                                        "example": "12345678901234"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "user@example.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "secret"
+                                    },
+                                    "wallet": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "default": 0,
+                                        "example": 100
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Usuário criado com sucesso"
+                    },
+                    "422": {
+                        "description": "Erro de validação"
+                    }
+                }
+            }
+        }
+    }
+}

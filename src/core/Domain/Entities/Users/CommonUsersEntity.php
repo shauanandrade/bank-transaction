@@ -3,15 +3,18 @@
 namespace Core\Domain\Entities\Users;
 
 use Core\Domain\Entities\Users\Contracts\ICommonUsersEntity;
+use Core\Domain\ValueObjects\CpfCnpj;
+use Core\Domain\ValueObjects\Email;
+use Core\Domain\ValueObjects\Password;
 
-class CommonUsersEntity implements ICommonUsersEntity
+class CommonUsersEntity extends UsersEntity implements ICommonUsersEntity
 {
     public function __construct(
-        private string $fullname,
-        private string $email,
-        private string $password,
-        private string $cpf,
-        private float  $wallet = 0.0
+        protected string   $fullname,
+        protected Email    $email,
+        protected Password $password,
+        protected CpfCnpj  $cpfCnpj,
+        protected float    $wallet = 0.0
     )
     {
         $this->validate();
@@ -23,129 +26,22 @@ class CommonUsersEntity implements ICommonUsersEntity
             throw new \Error("Field fullname is required and must be at least 3 character.");
         }
 
-        if (!($this->email)) {
-            throw new \Error("Field email is required.");
-        }
-
-        if (filter_var($this->email, FILTER_VALIDATE_EMAIL) === false) {
-            throw new \Error("Field email invalid.");
-        }
-
-        if (!$this->cpf) {
+        if (!$this->cpfCnpj->getValue()) {
             throw new \Error("Field CPF is required");
+        }else {
+            $this->cpfCnpj->validateCPF();
         }
 
-        if (!$this->validateCPF()) {
-            throw new \Error("CPF is invalid.");
-        }
-
     }
 
-    public function validateCPF(): bool
-    {
-        $cpf = preg_replace('/[^0-9]/is', '', $this->cpf);
-
-        if (strlen($cpf) != 11) {
-            return false;
-        }
-
-        if (preg_match('/(\d)\1{10}/', $cpf)) {
-            return false;
-        }
-
-        for ($t = 9; $t < 11; $t++) {
-            for ($d = 0, $c = 0; $c < $t; $c++) {
-                $d += $cpf[$c] * (($t + 1) - $c);
-            }
-            $d = ((10 * $d) % 11) % 10;
-            if ($cpf[$c] != $d) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    public function getFullname(): string
-    {
-        return $this->fullname;
-    }
-
-    public function setFullname(string $fullname): void
-    {
-        $this->fullname = $fullname;
-    }
-
-    public function getCpf(): string
-    {
-        return $this->cpf;
-    }
-
-    public function setCpf(string $cpf): void
-    {
-        $this->cpf = $cpf;
-    }
-
-    public function getEmail(): string
-    {
-        return $this->email;
-    }
-
-    public function setEmail(string $email): void
-    {
-        $this->email = $email;
-    }
-
-    public function getPassword(): string
-    {
-        return $this->password;
-    }
-
-    public function setPassword(string $password): void
-    {
-        $this->password = $password;
-    }
-
-    public function getWallet(): float
-    {
-        return $this->wallet;
-    }
-
-    public function setWallet(float $wallet): void
-    {
-        $this->wallet = $wallet;
-    }
-
-    public function deposit(float $value): void
-    {
-        $this->wallet += $value;
-    }
-
-    public function withdraw(float $value): bool
-    {
-        if ($value <= $this->wallet) {
-            $this->wallet -= $value;
-            return true;
-        }
-
-        return false;
-    }
-
-    public function transfer(float $value, ICommonUsersEntity $recipient): bool
-    {
-        if ($this->withdraw($value)) {
-            $recipient->deposit($value);
-            return true;
-        }
-        return false;
-    }
 
     public static function toEntity(array $user): self
     {
         return new self(
-            $user['fullname'],
-            $user['email'],
-            $user['password'],
-            $user['cpf_cnpj'],
+            $user['fullname'] ?? '',
+            new Email($user['email']) ?? '',
+            new Password($user['password']) ?? '',
+            new CpfCnpj($user['cpf_cnpj'])??'',
             $user['wallet'] ?? 0.0,
         );
     }
@@ -153,11 +49,12 @@ class CommonUsersEntity implements ICommonUsersEntity
     public function toArray(): array
     {
         return [
+            "id" => $this->getId(),
             "fullname" => $this->getFullname(),
             "email" => $this->getEmail(),
             "password" => $this->getPassword(),
-            "cpf_cnpj" => $this->getCpf(),
-            "wallet" => (float) $this->getWallet(),
+            "cpf_cnpj" => $this->getCpfCnpj()->getValue(),
+            "wallet" => (float)$this->getWallet(),
         ];
     }
 }
