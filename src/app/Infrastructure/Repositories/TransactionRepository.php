@@ -22,6 +22,6 @@ class TransactionRepository implements ITransactionRepository
 
     public function findTransactionExtract(int $payerId): ?array
     {
-        return Transactions::where('user_payer_id',$payerId)->orWhere('user_payee_id',$payerId)->get()->toArray();
+        return Transactions::where('user_payer_id', $payerId)->orWhere('user_payee_id', $payerId)->get()->toArray();
     }
 }

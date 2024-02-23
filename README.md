@@ -8,7 +8,7 @@ Este projeto é uma implementação de um aplicativo de transações bancárias 
 O projeto está estruturado da seguinte forma:
 
 - **src/**: Contém o código-fonte da aplicação.
-    - **app/**: Onde reside a lógica da aplicação.
+    - **app/**: Esta pasta contém tudo que está relacionado ao framework utilizado no projeto.
         - **Exceptions/**: Classes de exceção personalizadas.
         - **Http/**: Controladores e middlewares HTTP.
             - **Middleware/**: Middlewares da aplicação.

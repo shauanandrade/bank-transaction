@@ -73,10 +73,10 @@ $app->configure('app');
 |
 */
 
- $app->middleware([
+// $app->middleware([
 //     App\Http\Middleware\ExceptionResponseMiddleware::class,
 //     App\Http\Middleware\JsonResponseMiddleware::class
- ]);
+// ]);
 
 // $app->middleware([
 //     App\Http\Middleware\ExampleMiddleware::class

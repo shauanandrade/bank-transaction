@@ -1,3 +1,2 @@
 #!/bin/bash
-cd src &&
-vendor/bin/phpunit --testdox "$@"
+cd src && vendor/bin/phpunit --testdox "$@"
