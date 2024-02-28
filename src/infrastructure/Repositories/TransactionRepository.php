@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Infrastructure\Repositories;
+namespace Infrastructure\Repositories;
 
 use App\Models\Transactions;
 use Core\Domain\Entities\Transaction\Contracts\ITransactionsEntity;

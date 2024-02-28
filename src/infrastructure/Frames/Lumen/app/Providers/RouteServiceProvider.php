@@ -2,10 +2,6 @@
 
 namespace App\Providers;
 
-use App\Infrastructure\Adapters\AuthorisationAdapter;
-use App\Infrastructure\Adapters\NotificationAdapter;
-use App\Infrastructure\Repositories\TransactionRepository;
-use App\Infrastructure\Repositories\UsersRepository;
 use Core\Application\Transactions\UserCase\Contracts\IExtractPayerTransactionUserCase;
 use Core\Application\Transactions\UserCase\Contracts\IMakeTransactionUseCase;
 use Core\Application\Transactions\UserCase\ExtractPayerTransactionUserCase;
@@ -21,6 +17,10 @@ use Core\Application\Users\UserCase\FindByCpfOrCnpjUserCase;
 use Core\Domain\Services\Transactions\TransactionService;
 use Core\Domain\Services\Users\UsersService;
 use Illuminate\Support\ServiceProvider;
+use Infrastructure\Adapters\AuthorisationAdapter;
+use Infrastructure\Adapters\NotificationAdapter;
+use Infrastructure\Repositories\TransactionRepository;
+use Infrastructure\Repositories\UsersRepository;
 
 class RouteServiceProvider extends ServiceProvider
 {

@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Infrastructure\Adapters;
+namespace Infrastructure\Adapters;
 
-use Core\Domain\Contracts\IAuthorisationExternal;
 use Core\Domain\Contracts\INotificationExternal;
 use Core\Domain\Entities\Transaction\Contracts\ITransactionsEntity;
 
@@ -24,7 +23,7 @@ class NotificationAdapter implements INotificationExternal
 
 //            $payerEmail = $transactionsEntity->getPayer()->getEmail()->getValue();
 //            $payeeEmail = $transactionsEntity->getPayee()->getEmail()->getValue();
-            
+
             if (isset($autorisationResponse['message']) && $autorisationResponse['message'] === true) {
                 return true;
             }

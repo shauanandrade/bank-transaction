@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Infrastructure\Adapters;
+namespace Infrastructure\Adapters;
 
 use Core\Domain\Contracts\IAuthorisationExternal;
 

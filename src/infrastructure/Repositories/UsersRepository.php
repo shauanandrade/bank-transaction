@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Infrastructure\Repositories;
+namespace Infrastructure\Repositories;
 
 use App\Models\User;
-use Core\Domain\Entities\Users\CommonUsersEntity;
 use Core\Domain\Entities\Users\Contracts\ICommonUsersEntity;
 use Core\Domain\Entities\Users\Contracts\IShopkeepersUsersEntity;
 use Core\Domain\Repositories\IUserRepository;
