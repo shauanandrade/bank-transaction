@@ -89,11 +89,17 @@ class TransactionsController extends Controller
      */
     public function transaction(Request $request)
     {
+        $rs = $this->validate($request,[
+            'payer'=>"integer|required",
+            'payee'=>"integer|required",
+            'value'=>"numeric|required"
+        ]);
+
         try {
             $this->makeTransactionUseCase->execute(
-                $request->get('payer'),
-                $request->get('payee'),
-                $request->get('value')
+                $rs['payer'],
+                $rs['payee'],
+                $rs['value']
             );
             return response()->json([
                 'messsage' => 'Transaction created successfully'

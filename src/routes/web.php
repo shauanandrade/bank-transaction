@@ -13,10 +13,21 @@
 |
 */
 
+$router->group(['prefix' => 'auth'], function ($router) {
+    $router->post('login', ['uses' => 'AuthController@login']);
+    $router->post('logout', ['uses' => 'AuthController@logout']);
+});
 
-$router->get('user',['uses'=>'UsersController@findAll']);
-$router->get('user/{cpf_cnpj}',['uses'=>'UsersController@findByCpfOrCnpj']);
-$router->post('user',['uses'=>'UsersController@createCommonUser']);
-$router->post('user/shopkeeper',['uses'=>'UsersController@createShopkeeperUser']);
-$router->post('transaction',['uses'=>'TransactionsController@transaction']);
-$router->get('transaction/extract/{id}',['uses'=>'TransactionsController@extract']);
+$router->group(['middleware' => 'jwt.auth'], function ($router) {
+    $router->group(['prefix' => 'auth'], function ($router) {
+        $router->post('refresh', ['uses' => 'AuthController@refresh']);
+    });
+
+    $router->get('user', ['uses' => 'UsersController@findAll']);
+    $router->get('user/{cpf_cnpj}', ['uses' => 'UsersController@findByCpfOrCnpj']);
+    $router->post('user', ['uses' => 'UsersController@createCommonUser']);
+    $router->post('user/shopkeeper', ['uses' => 'UsersController@createShopkeeperUser']);
+    $router->post('transaction', ['uses' => 'TransactionsController@transaction']);
+    $router->get('transaction/extract/{id}', ['uses' => 'TransactionsController@extract']);
+
+});

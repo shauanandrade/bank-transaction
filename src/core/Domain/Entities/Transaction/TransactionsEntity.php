@@ -39,6 +39,10 @@ class TransactionsEntity implements ITransactionsEntity
 
     public function makeTransaction(): bool
     {
+        if($this->payer->getCpfCnpj() == $this->payee->getCpfCnpj()){
+            throw new \Error("You can't transfer it to yourself");
+        }
+
         if ($this->payer->getWallet() >= $this->value) {
 
             $this->payer->withdraw($this->value);

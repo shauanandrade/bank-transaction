@@ -38,6 +38,7 @@ $app = new Laravel\Lumen\Application(
 |
 */
 $app->configure('swagger-lume');
+$app->configure('jwt');
 
 $app->singleton(
     Illuminate\Contracts\Debug\ExceptionHandler::class,
@@ -73,18 +74,18 @@ $app->configure('app');
 |
 */
 
-// $app->middleware([
-//     App\Http\Middleware\ExceptionResponseMiddleware::class,
+ $app->middleware([
+     App\Http\Middleware\ExceptionResponseMiddleware::class,
 //     App\Http\Middleware\JsonResponseMiddleware::class
-// ]);
+ ]);
 
 // $app->middleware([
 //     App\Http\Middleware\ExampleMiddleware::class
 // ]);
 
-// $app->routeMiddleware([
-//     'auth' => App\Http\Middleware\Authenticate::class,
-// ]);
+ $app->routeMiddleware([
+     'jwt.auth' => App\Http\Middleware\Authenticate::class,
+ ]);
 
 /*
 |--------------------------------------------------------------------------
@@ -96,11 +97,12 @@ $app->configure('app');
 | totally optional, so you are not required to uncomment this line.
 |
 */
+$app->register(Tymon\JWTAuth\Providers\LumenServiceProvider::class);
 $app->register(\SwaggerLume\ServiceProvider::class);
  $app->register(\Illuminate\Database\DatabaseServiceProvider::class);
  $app->register(App\Providers\RouteServiceProvider::class);
 // $app->register(App\Providers\AppServiceProvider::class);
-// $app->register(App\Providers\AuthServiceProvider::class);
+ $app->register(App\Providers\AuthServiceProvider::class);
 // $app->register(App\Providers\EventServiceProvider::class);
 
 /*
